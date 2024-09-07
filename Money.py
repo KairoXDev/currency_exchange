@@ -5,10 +5,17 @@ from tkinter import messagebox as mb    # Импортируем модуль д
 from tkinter import ttk     # Импортируем модуль ttk из библиотеки tkinter для использования виджетов с расширенными стилями и функциями
 
 
-def update_c_label(event):
-    code = t_combobox.get()   # Получаем выбранный код валюты из выпадающего списка (combobox)
+def update_t_label(event):
+    code = t_combobox.get()   # Получаем выбранный код валюты из целевого выпадающего списка (combobox)
     name = cur[code]    # Получаем название валюты из словаря cur
-    c_label.config(text=name)   # Обновляем текст метки на название валюты
+    t_label.config(text=name)   # Обновляем текст целевой метки на название валюты
+
+
+def update_b_label(event):
+    code = b_combobox.get()   # Получаем выбранный код валюты из базового выпадающего списка (combobox)
+    name = cur[code]    # Получаем название валюты из словаря cur
+    b_label.config(text=name)   # Обновляем текст базовой метки на название валюты
+
 
 def exchange():
     t_code = t_combobox.get()  # Получаем выпадающий список кода валюты.
@@ -47,19 +54,21 @@ window = Tk()   # Создаем главное окно приложения
 window.title("Курсы обмена валют")   # Устанавливаем заголовок окна
 window.geometry("360x300")   # Задаем размеры окна
 
-Label(text="Базовая валюта").pack(padx=10, pady=10)
+Label(text="Базовая валюта").pack(padx=10, pady=10)     # Добавляем метку с текстом, базовой валюты
 b_combobox = ttk.Combobox(values=list(cur.keys()))     # Создаем выпадающий список с значениями валют из списка cur
-b_combobox.pack(padx=10, pady=10)
+b_combobox.pack(padx=10, pady=10)       # Размещаем комбобокс (выпадающий список) на окне с отступами по оси X и Y
+b_combobox.bind("<<ComboboxSelected>>", update_b_label) # Привязываем функцию обновления базовой метки к событию выбора элемента в комбобоксе
 
-Label(text="Целевая валюта").pack(padx=10, pady=10)     # Добавляем метку с текстом, которая указывает пользователю ввести код валюты
+b_label = ttk.Label()   # Создаем метку для отображения названия базовой валюты
+b_label.pack(padx=10, pady=10)  # Размещаем метку на окне с отступами по оси X и Y
 
-
+Label(text="Целевая валюта").pack(padx=10, pady=10)     # Добавляем метку с текстом, целевой валюты
 t_combobox = ttk.Combobox(values=list(cur.keys()))     # Создаем выпадающий список с значениями валют из списка cur
 t_combobox.pack(padx=10, pady=10)     # Размещаем комбобокс (выпадающий список) на окне с отступами по оси X и Y
-t_combobox.bind("<<ComboboxSelected>>", update_c_label) # Привязываем функцию обновления метки к событию выбора элемента в комбобоксе
+t_combobox.bind("<<ComboboxSelected>>", update_t_label) # Привязываем функцию обновления целевой метки к событию выбора элемента в комбобоксе
 
-c_label = ttk.Label()   # Создаем метку для отображения названия валюты
-c_label.pack(padx=10, pady=10)  # Размещаем метку на окне с отступами по оси X и Y
+t_label = ttk.Label()   # Создаем метку для отображения названия целевой валюты
+t_label.pack(padx=10, pady=10)  # Размещаем метку на окне с отступами по оси X и Y
 
 Button(text="Получить курс обмена", command=exchange).pack(padx=10, pady=10)      # Создаем кнопку, при нажатии на которую будет выполняться функция exchange
 
